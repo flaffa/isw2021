@@ -13,17 +13,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<RegisterComponent>;
     let comp: RegisterComponent;
 
-    beforeEach(
-      waitForAsync(() => {
-        TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule],
-          declarations: [RegisterComponent],
-          providers: [FormBuilder],
-        })
-          .overrideTemplate(RegisterComponent, '')
-          .compileComponents();
-      })
-    );
+    
 
     beforeEach(() => {
       fixture = TestBed.createComponent(RegisterComponent);
