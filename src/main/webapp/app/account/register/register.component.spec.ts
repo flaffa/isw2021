@@ -13,7 +13,17 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<RegisterComponent>;
     let comp: RegisterComponent;
 
-    
+    beforeEach(
+      waitForAsync(() => {
+        TestBed.configureTestingModule({
+          imports: [HttpClientTestingModule],
+          declarations: [RegisterComponent],
+          providers: [FormBuilder],
+        })
+          .overrideTemplate(RegisterComponent, '')
+          .compileComponents();
+      })
+    );
 
     beforeEach(() => {
       fixture = TestBed.createComponent(RegisterComponent);
@@ -30,6 +40,31 @@ describe('Component Tests', () => {
 
       expect(comp.doNotMatch).toBe(true);
     });
+
+    it('should update success to true after creating an account', inject(
+      [RegisterService],
+      fakeAsync((service: RegisterService) => {
+        spyOn(service, 'save').and.returnValue(of({}));
+        comp.registerForm.patchValue({
+          password: 'password',
+          confirmPassword: 'password',
+        });
+
+        comp.register();
+        tick();
+
+        expect(service.save).toHaveBeenCalledWith({
+          email: '',
+          password: 'password',
+          login: '',
+          langKey: 'es',
+        });
+        expect(comp.success).toBe(true);
+        expect(comp.errorUserExists).toBe(false);
+        expect(comp.errorEmailExists).toBe(false);
+        expect(comp.error).toBe(false);
+      })
+    ));
 
     it('should notify of user existence upon 400/login already in use', inject(
       [RegisterService],
